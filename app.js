@@ -1,3 +1,8 @@
+// Date: 2025-01-16
+// Author: Christian Rose
+// Description: A simple command-line password generator tool.
+
+
 // Import required modules
 const readline = require('readline');
 
