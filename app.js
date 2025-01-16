@@ -2,7 +2,6 @@
 // Author: Christian Rose
 // Description: A simple command-line password generator tool.
 
-
 // Import required modules
 const readline = require('readline');
 
@@ -21,33 +20,34 @@ Examples:
     node app.js --length 10`);
 }
 
-// Function to generate a random password
-function generatePassword(options) {
-    const lowerCaseChars = 'abcdefghijklmnopqrstuvwxyz';
-    const upperCaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numberChars = '0123456789';
-    const symbolChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+// Function to build the character pool based on user options
+function buildCharacterPool(options) {
+    let characterPool = 'abcdefghijklmnopqrstuvwxyz'; // Default lowercase characters
 
-    let characterPool = lowerCaseChars;
-
-    // Add characters based on user options
     if (options.uppercase) {
-        characterPool += upperCaseChars;
+        characterPool += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Add uppercase letters
     }
     if (options.numbers) {
-        characterPool += numberChars;
+        characterPool += '0123456789'; // Add numbers
     }
     if (options.symbols) {
-        characterPool += symbolChars;
+        characterPool += '!@#$%^&*()_+-=[]{}|;:,.<>?'; // Add symbols
     }
 
-    // Check if the character pool is empty
-    if (characterPool === '') {
+    return characterPool;
+}
+
+// Function to generate a random password
+function generatePassword(options) {
+    const characterPool = buildCharacterPool(options); // Use the new function to build the character pool
+
+    // Validate the character pool
+    if (!characterPool) {
         console.error('Error: No character types selected. Please use --uppercase, --numbers, or --symbols.');
         process.exit(1);
     }
 
-    // Build the password
+    // Generate the password
     let password = '';
     for (let i = 0; i < options.length; i++) {
         const randomIndex = Math.floor(Math.random() * characterPool.length);
@@ -61,7 +61,7 @@ function generatePassword(options) {
 function parseArgs() {
     const args = process.argv.slice(2);
     const options = {
-        length: 8, // Default length if not specified
+        length: 8, // Default length 
         uppercase: false,
         numbers: false,
         symbols: false,
